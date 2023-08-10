@@ -77,8 +77,6 @@ export default function SubjectWiseTodoList({route, navigation }) {
 
   },[]);
 
-  
-
   if(isLoading){
     return (
       <View style={styles.container}>

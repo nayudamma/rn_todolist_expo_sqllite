@@ -103,7 +103,7 @@ export default function TaskDetails({ route, navigation }) {
 
           />
         </View>
-        <View style={{ zIndex: 100 }}>
+        <View style={styles.timeSpendCoontainer}>
           <Text>TimeSpend:</Text>
           <DropDownPicker
             open={open}
@@ -112,6 +112,7 @@ export default function TaskDetails({ route, navigation }) {
             setOpen={setOpen}
             setValue={setValue}
             setItems={setItems}
+            containerStyle={{width: 200}}
           />
         </View>
         
@@ -120,10 +121,15 @@ export default function TaskDetails({ route, navigation }) {
           <TextInput
             multiline={true}
             numberOfLines={10}
-            style={{ height:200, textAlignVertical: 'top',}}/>
-        </View>
+            style={styles.discrptionInputText}
+           />
+        </View>      
        
-       
+      </View>
+      <View style={styles.submitDetailsCoontainer}>
+        <TouchableOpacity style={styles.button} >
+            <Text>Save</Text>
+        </TouchableOpacity>
       </View>
       </SafeAreaView>
    
@@ -153,7 +159,13 @@ const styles = StyleSheet.create({
   dateRowContainer: {
     flexDirection: "row",
 
-    // marginVertical:10,
+    alignItems: 'center',
+    justifyContent: 'center'
+
+  },
+  timeSpendCoontainer:{
+    zIndex: 100 ,
+    flexDirection: "row",
     alignItems: 'center',
     justifyContent: 'center'
 
@@ -179,11 +191,8 @@ const styles = StyleSheet.create({
   },
   discrptionInput: {
     marginTop:5,
-    flex: 3,
-    // lineHeight: 23,
-    //flex: 2,
     textAlignVertical: 'top',
-    //borderRadius:26
+    borderRadius:26,
     borderColor: "blue",
     width: "60%",
     borderWidth: 1,
@@ -192,16 +201,8 @@ const styles = StyleSheet.create({
     height:200
   },
   button: {
-    //backgroundColor:"blue",
-    alignItems: "center",
-    // justifyContent:"center",
-    //alignSelf:"stretch",
-    // paddingVertical:12,
-    // paddingHorizontal:32,
-    // marginTop:32,
-    // marginHorizontal:32,
-
-    //borderRadius:6,
+   
+    alignItems: "center",   
 
     width: 150,
     height: 44,
@@ -218,6 +219,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
   },
+  
+  discrptionInputText: {
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    backgroundColor: '#FFF',
+    borderRadius: 60,
+    borderColor: '#C0C0C0',
+    borderWidth: 1,
+   height:180, 
+   textAlignVertical: 'top'
+  },
   taskInfo: {
     flex: 1,
     backgroundColor: 'white',
@@ -229,7 +241,7 @@ const styles = StyleSheet.create({
 
   },
   taskDetails: {
-    flex: 3,
+    flex: 4,
     backgroundColor: 'white',
     borderWidth: 2,
     borderColor: Colors.accent,
@@ -237,5 +249,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10
   },
+  submitDetailsCoontainer:{
+    flex: 1,
+    backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: Colors.accent,
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 10
+
+  }
 
 });
