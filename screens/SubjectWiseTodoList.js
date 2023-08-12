@@ -67,7 +67,7 @@ export default function SubjectWiseTodoList({route, navigation }) {
      console.log("in use effect");
      
     db.transaction(tx => {
-      tx.executeSql('SELECT * FROM Sylabus_Tasklist where subject=?',[subject],
+      tx.executeSql('SELECT * FROM Sylabus_Tasklist1 where subject=?',[subject],
         (txObj, resultSet) => setTasks(resultSet.rows._array),
         (txObj, error) => console.log(error)
       );
@@ -102,7 +102,7 @@ export default function SubjectWiseTodoList({route, navigation }) {
   const addTaskToList = () => {
     console.log("in add task to list---------------------");
     db.transaction(tx => {
-      tx.executeSql('INSERT INTO Sylabus_tasklist (task_name,status,subject,created_date) values (?,?,?,date(\'now\',\'localtime\'))', 
+      tx.executeSql('INSERT INTO Sylabus_tasklist1 (task_name,status,subject,created_date) values (?,?,?,date(\'now\',\'localtime\'))', 
                         ['This is MATH task',0,'MATH'],
         (txObj, resultSet) => {
           console.log("record inserted");
@@ -117,7 +117,7 @@ export default function SubjectWiseTodoList({route, navigation }) {
     
     if(taskName===null) return;
     db.transaction(tx => {
-      tx.executeSql('INSERT INTO Sylabus_tasklist (task_name,status,subject,created_date) values (?,?,?,date(\'now\',\'localtime\'))', 
+      tx.executeSql('INSERT INTO Sylabus_tasklist1 (task_name,status,subject,created_date) values (?,?,?,date(\'now\',\'localtime\'))', 
                         [taskName,0,subject],
         (txObj, resultSet) => {
           console.log("record inserted");

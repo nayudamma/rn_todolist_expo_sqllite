@@ -4,15 +4,15 @@ export default function dataservie(){
     const db = SQLite.openDatabase('SylabusTrackerexpo.db');
     return{
         initializeDatabase(){
-            /* db.transaction(tx=>{
-              tx.executeSql('drop table Sylabus_Tasklist');
-              console.log('table droped');
-             });  */
+            
              db.transaction(tx =>{
+           //  tx.executeSql('drop table Sylabus_Tasklist',null,(txObj,resultSet)=>{console.log("---table droooped----");},(txObj, error) =>{ console.log("erroor in droooping table"+error)});
+            // console.log("table drooped");
              
-             tx.executeSql('CREATE TABLE IF NOT EXISTS Sylabus_Tasklist (id INTEGER PRIMARY KEY AUTOINCREMENT, task_name TEXT,status INTEGER,subject TEXT,created_date DATE)');
-             //this.fetchTaskList();
-             console.log("table created");
+             tx.executeSql('CREATE TABLE IF NOT EXISTS Sylabus_Tasklist1 (id INTEGER PRIMARY KEY AUTOINCREMENT,'+ 
+                            'task_name TEXT,status INTEGER,subject TEXT,created_date DATE'+
+                            'start_date DATE,discription TEXT,time_spent INTEGER)',null,(txObj,resultSet)=>{console.log("---table created----" );},(txObj, error) => console.log("error in creating table"+error));
+            
         });
         return true;
         },

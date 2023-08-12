@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { StyleSheet, Text, TextInput, Button, View, Image, TouchableOpacity,SafeAreaView } from 'react-native';
+import { StyleSheet, Text, TextInput, Button, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import Colors from '../utils/Colors';
 import DatePicker from '@react-native-community/datetimepicker';
 import RadioGroup from 'react-native-radio-buttons-group';
@@ -43,8 +43,9 @@ export default function TaskDetails({ route, navigation }) {
     }
   ]), []);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState(0);
   const [items, setItems] = useState([
+    { label: '00', value: 0 },
     { label: '15', value: 15 },
     { label: '30', value: 30 },
     { label: '45', value: 45 },
@@ -56,22 +57,21 @@ export default function TaskDetails({ route, navigation }) {
 
   return (
 
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
 
       <View style={styles.taskInfo}>
-
         <View style={styles.staticRowContainer}>
-          <Text style={styles.text}>Task:</Text>
-          <Text style={styles.text}>{selectedTask.task_name}</Text>
+            <Text style={styles.text}>Task:</Text>
+            <Text style={styles.text}>{selectedTask.task_name}</Text>
+          </View>
+          <View style={styles.staticRowContainer}>
+            <Text style={styles.text}>CreatedDate:</Text>
+            <Text style={styles.text}>{selectedTask.created_date}</Text>
         </View>
-        <View style={styles.staticRowContainer}>
-          <Text style={styles.text}>CreatedDate:</Text>
-          <Text style={styles.text}>{selectedTask.created_date}</Text>
-        </View>
+        
       </View>
-      
       <View style={styles.taskDetails}>
-        <View style={styles.dateRowContainer}>
+      <View style={styles.dateRowContainer}>
           <Text style={styles.text}>StartDate</Text>
 
           <TouchableOpacity style={styles.button} onPress={showDatepicker}>
@@ -105,6 +105,7 @@ export default function TaskDetails({ route, navigation }) {
         </View>
         <View style={styles.timeSpendCoontainer}>
           <Text>TimeSpend:</Text>
+         
           <DropDownPicker
             open={open}
             value={value}
@@ -112,31 +113,29 @@ export default function TaskDetails({ route, navigation }) {
             setOpen={setOpen}
             setValue={setValue}
             setItems={setItems}
-            containerStyle={{width: 200}}
+            containerStyle={{ width: 200 }}
           />
+         
         </View>
-        
+
         <View styles={styles.discrptionInput}>
+          
           <Text>Discription:</Text>
           <TextInput
             multiline={true}
             numberOfLines={10}
             style={styles.discrptionInputText}
-           />
-        </View>      
-       
+          />
+        </View>
+        <View style={styles.saveButton}>
+          <TouchableOpacity style={styles.button} >
+            <Text style={{alignContent:'center'}}>Save</Text>
+          </TouchableOpacity>
+        </View>
+        
       </View>
-      <View style={styles.submitDetailsCoontainer}>
-        <TouchableOpacity style={styles.button} >
-            <Text>Save</Text>
-        </TouchableOpacity>
-      </View>
-      </SafeAreaView>
-   
 
-
-
-
+    </View>
   )
 };
 const styles = StyleSheet.create({
@@ -163,8 +162,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
 
   },
-  timeSpendCoontainer:{
-    zIndex: 100 ,
+  timeSpendCoontainer: {
+    zIndex: 100,
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: 'center'
@@ -190,36 +189,43 @@ const styles = StyleSheet.create({
     //backgroundColor: '#e8e8e8' 
   },
   discrptionInput: {
-    marginTop:5,
+    marginTop: 5,
     textAlignVertical: 'top',
-    borderRadius:26,
+    borderRadius: 26,
     borderColor: "blue",
     width: "60%",
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
-    height:200
+    height: 200
   },
   button: {
-   
-    alignItems: "center",   
-
     width: 150,
     height: 44,
     padding: 10,
-    marginTop: 20,
-    marginBottom: 10,
-    backgroundColor: '#e8e8e8'
+    marginTop: 10,
+    marginBottom: 5,
+    backgroundColor: '#e8e8e8',
+    alignItems:'center',
+    alignContent:'center'
+    
+  },
+  saveButton: {
+   
+    alignItems: 'center',
+    justifyContent: 'center',
+    
+
   },
   textInput: {
 
     borderColor: 'black',
     backgroundColor: 'red',
-    borderColor: "gray",   
+    borderColor: "gray",
     borderWidth: 1,
     borderRadius: 10,
   },
-  
+
   discrptionInputText: {
     paddingVertical: 15,
     paddingHorizontal: 15,
@@ -227,16 +233,17 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     borderColor: '#C0C0C0',
     borderWidth: 1,
-   height:180, 
-   textAlignVertical: 'top'
+    height: 180,
+    textAlignVertical: 'top'
   },
   taskInfo: {
-    flex: 1,
+    flex:1,
     backgroundColor: 'white',
     borderWidth: 2,
     borderColor: Colors.accent,
     padding: 10,
     borderRadius: 10,
+    alignItems: 'center',
     justifyContent: 'center'
 
   },
@@ -249,14 +256,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10
   },
-  submitDetailsCoontainer:{
+  submitDetailsCoontainer: {
     flex: 1,
     backgroundColor: 'white',
     borderWidth: 2,
     borderColor: Colors.accent,
     padding: 10,
     borderRadius: 10,
-    marginTop: 10
+    alignItems: "center",
+    marginTop: 10,
+    justifyContent: 'center'
 
   }
 
