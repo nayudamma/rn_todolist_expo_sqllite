@@ -4,12 +4,17 @@ import Colors from '../utils/Colors';
 import DatePicker from '@react-native-community/datetimepicker';
 import RadioGroup from 'react-native-radio-buttons-group';
 import DropDownPicker from 'react-native-dropdown-picker';
+import * as SQLite from 'expo-sqlite';
 
 export default function TaskDetails({ route, navigation }) {
   const { selectedTask } = route.params;
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
+
+  /* const [startDate, setDate] = useState(selectedTask.start_date!=null ? d :new Date());
+   const [mode, setMode] = useState('date');
+   const [show, setShow] = useState(false); */
+  const [discription, setDiscription] = useState(selectedTask.discription);
+  const db = SQLite.openDatabase('SylabusTrackerexpo.db');
+
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -43,7 +48,7 @@ export default function TaskDetails({ route, navigation }) {
     }
   ]), []);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(0);
+  const [timeSpend, setValue] = useState(selectedTask.time_spent == null ? 0 : selectedTask.time_spent);
   const [items, setItems] = useState([
     { label: '00', value: 0 },
     { label: '15', value: 15 },
@@ -54,42 +59,58 @@ export default function TaskDetails({ route, navigation }) {
   ]);
 
   const [selectedId, setSelectedId] = useState(selectedTask.status);
+  handleSaveTaskDetails = () => {
+    // const startDateString = startDate.toLocaleDateString();
 
+    db.transaction(tx => {
+      console.log("in handle task details--selectedId:--"+selectedId);
+      console.log("in handle task details--Id:--"+selectedTask.id);
+      tx.executeSql('UPDATE SylabusTasklist SET status= ?, discription=?,time_spent=? where id=?',
+        [selectedId, discription, timeSpend, selectedTask.id],
+        // console.log("--------record updated11111111111111-----");            
+        (txObj, resultSet) => {
+          console.log("record update");
+          
+        },
+        (txObj, error) => console.log(error)
+      );
+    });
+    navigation.navigate('Home');
+  }
   return (
 
     <View style={styles.container}>
 
       <View style={styles.taskInfo}>
         <View style={styles.staticRowContainer}>
-            <Text style={styles.text}>Task:</Text>
-            <Text style={styles.text}>{selectedTask.task_name}</Text>
-          </View>
-          <View style={styles.staticRowContainer}>
-            <Text style={styles.text}>CreatedDate:</Text>
-            <Text style={styles.text}>{selectedTask.created_date}</Text>
+          <Text style={styles.textTaskLable}>Task:</Text>
+          <Text style={styles.textTaskName}>{selectedTask.task_name}</Text>
         </View>
-        
+        <View style={styles.staticRowContainer}>
+          <Text style={styles.text}>CreatedDate:</Text>
+          <Text style={styles.text}>{selectedTask.created_date}</Text>
+        </View>
+
       </View>
       <View style={styles.taskDetails}>
-      <View style={styles.dateRowContainer}>
+        {/* <View style={styles.dateRowContainer}>
           <Text style={styles.text}>StartDate</Text>
 
           <TouchableOpacity style={styles.button} onPress={showDatepicker}>
-            <Text>{date.toLocaleString()}</Text>
+            <Text>{startDate.toLocaleDateString()}</Text>
           </TouchableOpacity>
-
-          {/* <Text>selected: {date.toLocaleString()}</Text> */}
           {show && (
             <DatePicker
               testID="dateTimePicker"
-              value={date}
+              value={startDate}
               mode={mode}
               is24Hour={true}
               onChange={onChange}
+             
 
             />
           )}
-        </View>
+        </View> */}
 
         <View>
           <Text>Status:</Text>
@@ -105,34 +126,38 @@ export default function TaskDetails({ route, navigation }) {
         </View>
         <View style={styles.timeSpendCoontainer}>
           <Text>TimeSpend:</Text>
-         
+
           <DropDownPicker
             open={open}
-            value={value}
+            value={timeSpend}
             items={items}
             setOpen={setOpen}
             setValue={setValue}
             setItems={setItems}
             containerStyle={{ width: 200 }}
           />
-         
+
         </View>
 
         <View styles={styles.discrptionInput}>
-          
+
           <Text>Discription:</Text>
           <TextInput
+            placeholder={'Any description'}
+            value={discription}
+            onChangeText={text => { setDiscription(text) }}
             multiline={true}
             numberOfLines={10}
             style={styles.discrptionInputText}
+
           />
         </View>
         <View style={styles.saveButton}>
-          <TouchableOpacity style={styles.button} >
-            <Text style={{alignContent:'center'}}>Save</Text>
+          <TouchableOpacity style={styles.button} onPress={handleSaveTaskDetails} >
+            <Text style={{ alignContent: 'center' }}>Save</Text>
           </TouchableOpacity>
         </View>
-        
+
       </View>
 
     </View>
@@ -150,9 +175,9 @@ const styles = StyleSheet.create({
   staticRowContainer: {
     flexDirection: "row",
 
-    // marginVertical:10,
-    alignItems: 'center',
-    justifyContent: 'center'
+    marginTop: 30,
+    alignItems: 'flex-start',
+    // justifyContent: 'flex-start'
 
   },
   dateRowContainer: {
@@ -169,14 +194,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
 
   },
+
   text: {
     textAlign: 'center',
     width: 150,
-    height: 44,
+    height: 74,
     padding: 10,
     marginTop: 20,
     marginBottom: 10,
     backgroundColor: '#e8e8e8'
+  },
+  textTaskLable: {
+    flex: 1,
+    fontSize: 20
+  },
+  textTaskName: {
+    flex: 4,
+    fontSize: 16,
+    backgroundColor: '#e8e8e8',
+
   },
   lable: {
     flex: 1,
@@ -206,15 +242,15 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 5,
     backgroundColor: '#e8e8e8',
-    alignItems:'center',
-    alignContent:'center'
-    
+    alignItems: 'center',
+    alignContent: 'center'
+
   },
   saveButton: {
-   
+
     alignItems: 'center',
     justifyContent: 'center',
-    
+
 
   },
   textInput: {
@@ -237,7 +273,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top'
   },
   taskInfo: {
-    flex:1,
+    flex: 2,
     backgroundColor: 'white',
     borderWidth: 2,
     borderColor: Colors.accent,
